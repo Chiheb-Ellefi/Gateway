@@ -1,5 +1,6 @@
 package delivery.system.gateway.config;
 
+import org.springframework.boot.logging.java.JavaLoggingSystem;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.cloud.gateway.route.RouteLocator;
@@ -8,7 +9,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaTypeFactory;
 import reactor.core.publisher.Mono;
+
+import java.security.Principal;
+import java.util.Objects;
 
 
 
@@ -18,14 +23,14 @@ public class RateLimiterConfig {
     @Primary
     public KeyResolver ipKeyResolver() {
         return exchange -> {
-            String ip=exchange.getRequest().getRemoteAddress().getAddress().getHostAddress();
+            String ip= Objects.requireNonNull(exchange.getRequest().getRemoteAddress()).getAddress().getHostAddress();
             return Mono.just(ip);
         };
     }
 
     @Bean
     public KeyResolver userKeyResolver() {
-        return exchange -> exchange.getPrincipal().map(principal -> principal.getName()).defaultIfEmpty("anonymous");
+        return exchange -> exchange.getPrincipal().map(Principal::getName).defaultIfEmpty("anonymous");
     }
     @Bean
     public KeyResolver apiKeyResolver(){
@@ -45,7 +50,7 @@ public class RateLimiterConfig {
     @Bean
     public KeyResolver compositeKeyResolver(){
         return exchange -> {
-            String ip=exchange.getRequest().getRemoteAddress().getAddress().getHostAddress();
+            String ip= Objects.requireNonNull(exchange.getRequest().getRemoteAddress()).getAddress().getHostAddress();
             return exchange.getPrincipal().map(principal -> ip +":"+ principal.getName()).defaultIfEmpty("anonymous");
         };
     }
@@ -84,5 +89,6 @@ public class RateLimiterConfig {
                 )
                 .build();
     }
+
 
 }

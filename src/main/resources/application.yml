@@ -59,6 +59,16 @@ spring:
           max-idle: 8
           min-idle: 4
           max-wait: 3000ms
+# ============================================
+# RESOURCE SERVER CONFIGURATION
+# ============================================
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${ISSUER_URI:https://AuthorizationService}
+          jwk-set-uri: ${JWKS_URI:https://AuthorizationService/oauth2/jwks}
 
 
 logging:
@@ -264,6 +274,12 @@ eureka:
     initial-status: UP
 
 
+# ============================================
+# RESOURCE SERVER CONFIGURATION
+# ============================================
+
+keySetURI: https://AuthorizationService/oauth2/jwks
+introspectionUri: https://AuthorizationService/oauth2/introspect
 
 
 
