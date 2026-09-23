@@ -1,0 +1,35 @@
+ARG BASE_DISTRO=eclipse-temurin
+ARG JDK_VERSION=25-jdk
+ARG JRE_VERSION=25-jre
+
+#------- Stage 1 : Build --------
+
+FROM ${BASE_DISTRO}:${JDK_VERSION} AS build
+
+LABEL authors="chihebellefi"
+WORKDIR /app
+
+COPY pom.xml .
+COPY .mvn .mvn
+COPY mvnw .
+RUN chmod +x mvnw
+RUN ./mvnw dependency:go-offline
+
+COPY src ./src
+RUN ./mvnw clean package -DskipTests
+
+#------- Stage 2 : Runtime --------
+
+
+FROM ${BASE_DISTRO}:${JRE_VERSION} AS runtime
+
+WORKDIR /app
+RUN groupadd spring && useradd -r -g spring -u 1001 spring
+COPY --from=build --chown=spring:spring /app/target/*.jar app.jar
+USER spring
+EXPOSE 8080
+
+HEALTHCHECK  --interval=30s --timeout=10s --start-period=5s --retries=3 \
+   CMD curl -f 'https://localhost:8080/actuator/health' || exit 1
+
+ENTRYPOINT ["java", "-jar" ,"app.jar"]
