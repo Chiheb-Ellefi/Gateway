@@ -1,6 +1,5 @@
 package delivery.system.gateway.config;
 
-import org.springframework.boot.logging.java.JavaLoggingSystem;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.cloud.gateway.route.RouteLocator;
@@ -9,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaTypeFactory;
 import reactor.core.publisher.Mono;
 
 import java.security.Principal;

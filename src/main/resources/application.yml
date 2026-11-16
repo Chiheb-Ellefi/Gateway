@@ -48,8 +48,8 @@ spring:
   # ============================================
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
       timeout: 2000ms
       database: 0
       lettuce:
@@ -59,7 +59,9 @@ spring:
           max-idle: 8
           min-idle: 4
           max-wait: 3000ms
-# ============================================
+      password: ${REDIS_DB_PASSWORD}
+      username: ${REDIS_DB_USERNAME}
+  # ============================================
 # RESOURCE SERVER CONFIGURATION
 # ============================================
 
@@ -67,8 +69,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${ISSUER_URI:https://AuthorizationService}
-          jwk-set-uri: ${JWKS_URI:https://AuthorizationService/oauth2/jwks}
+          issuer-uri: ${ISSUER_URI}
+          jwk-set-uri: ${JWKS_URI}
 
 
 logging:
@@ -194,21 +196,21 @@ resilience4j:
 
 server:
   shutdown: graceful
-  port: 8080
+  port: ${SERVER_PORT}
   netty:
     connection-timeout: 30s
     idle-timeout: 60s
   forward-headers-strategy: framework
   ssl:
-    enabled: ${SSL_ENABLED:true}
-    key-store: ${SSL_KEYSTORE:/home/chihebellefi/certs/keystore.p12}
-    key-store-password: ${SSL_KEYSTORE_PASSWORD:password}
-    key-store-type: PKCS12
-    key-alias: ${SSL_KEY_ALIAS:tomcat}
+    enabled: ${SSL_ENABLED}
+    key-store: ${SSL_KEYSTORE}
+    key-store-password: ${SSL_KEYSTORE_PASSWORD}
+    key-store-type: ${SSL_KEYSTORE_TYPE}
+    key-alias: ${SSL_KEY_ALIAS}
     # Trust store for connecting to Eureka
-    trust-store: ${SSL_TRUSTSTORE:/home/chihebellefi/certs/keystore.p12}
-    trust-store-password: ${SSL_TRUSTSTORE_PASSWORD:password}
-    trust-store-type: PKCS12
+    trust-store: ${SSL_TRUSTSTORE}
+    trust-store-password: ${SSL_TRUSTSTORE_PASSWORD}
+    trust-store-type:  ${SSL_KEYSTORE_TYPE}
 
 # ============================================
 # EUREKA CLIENT CONFIGURATION
@@ -217,7 +219,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: https://user:password@localhost:8761/eureka/
+      defaultZone: 'http://${REGISTRY_USERNAME}:${REGISTRY_PASSWORD}@${REGISTRY_HOSTNAME}:${REGISTRY_PORT}/eureka/'
     enabled: true
     register-with-eureka: true
     fetch-registry: true
@@ -238,14 +240,14 @@ eureka:
       connect-request-timeout: 8000
       socket-timeout: 10000
     tls:
-      enabled: true
-      key-store: file:/home/chihebellefi/certs/keystore.p12
-      key-store-type: PKCS12
-      key-store-password: ${SSL_KEYSTORE_PASSWORD:password}
-      key-password: ${SSL_KEY_PASSWORD:password}
-      trust-store: file:/home/chihebellefi/certs/keystore.p12
-      trust-store-password: ${SSL_TRUSTSTORE_PASSWORD:password}
-      trust-store-type: PKCS12
+      enabled: ${SSL_ENABLED}
+      key-store: ${SSL_KEYSTORE}
+      key-store-type:  ${SSL_KEYSTORE_TYPE}
+      key-store-password: ${SSL_KEYSTORE_PASSWORD}
+      key-password: ${SSL_KEY_PASSWORD}
+      trust-store: ${SSL_TRUSTSTORE}
+      trust-store-password: ${SSL_TRUSTSTORE_PASSWORD}
+      trust-store-type:  ${SSL_KEYSTORE_TYPE}
     eureka-server-connect-timeout-seconds: 5
     eureka-server-read-timeout-seconds: 8
     eureka-server-total-connections: 200
@@ -255,16 +257,15 @@ eureka:
     log-delta-diff: true
     g-zip-content: true
   instance:
-    hostname: ${HOSTNAME:localhost}
-    ip-address: 127.0.0.1
+    hostname: ${GATEWAY_SERVICE_NAME}
     prefer-ip-address: false
-    non-secure-port: 8080
-    non-secure-port-enabled: false
-    secure-port: 8080
-    secure-port-enabled: true
-    status-page-url: https://${eureka.instance.hostname}:${eureka.instance.secure-port}/actuator/info
-    health-check-url: https://${eureka.instance.hostname}:${eureka.instance.secure-port}/actuator/health
-    home-page-url: https://${eureka.instance.hostname}:${eureka.instance.secure-port}/
+    non-secure-port: ${server.port}
+    non-secure-port-enabled: true
+    secure-port: ${server.port}
+    secure-port-enabled: false
+    status-page-url: "http://${eureka.instance.hostname}:${eureka.instance.secure-port}/actuator/info"
+    health-check-url: "http://${eureka.instance.hostname}:${eureka.instance.secure-port}/actuator/health"
+    home-page-url: "http://${eureka.instance.hostname}:${eureka.instance.secure-port}/"
     lease-renewal-interval-in-seconds: 10
     lease-expiration-duration-in-seconds: 60
     metadata-map:
@@ -272,14 +273,15 @@ eureka:
       version: 1.0.0
       profile: dev
     initial-status: UP
+    instance-id: ${spring.application.name}:${POD_NAME}
 
 
 # ============================================
 # RESOURCE SERVER CONFIGURATION
 # ============================================
 
-keySetURI: https://AuthorizationService/oauth2/jwks
-introspectionUri: https://AuthorizationService/oauth2/introspect
+keySetURI: "http://auth-service.auth.svc.cluster.local/oauth2/jwks"
+introspectionUri: "http://auth-service.auth.svc.cluster.local/oauth2/introspect"
 
 
 

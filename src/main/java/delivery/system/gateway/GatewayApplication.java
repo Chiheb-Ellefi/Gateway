@@ -11,5 +11,7 @@ public class GatewayApplication {
     public static void main(String[] args) {
         SpringApplication.run(GatewayApplication.class, args);
     }
+    /*TODO : FETCH THE CONFIGURATION FROM THE CONFIG SERVER
+    *  SET THE ROUTES */
 
 }
