@@ -1,3 +1,18 @@
+spring:
+  application:
+    name: Gateway
+  cloud:
+    discovery:
+      enabled: false
+    config:
+      enabled: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9999/jwks   # dummy, only needed so the JWT decoder bean can be created
+eureka:
+  client:
+    enabled: false
 server:
-  shutdown: graceful
-  port: 9000
+  port: 3003
