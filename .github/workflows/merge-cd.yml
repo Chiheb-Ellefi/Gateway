@@ -26,4 +26,4 @@ jobs:
       actions: read
       packages: write
     with:
-      image-name: "ghcr.io/chiheb-ellefi/service-registry"
+      image-name: "ghcr.io/chiheb-ellefi/gateway"
