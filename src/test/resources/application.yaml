@@ -10,9 +10,9 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://localhost:9999/jwks   # dummy, only needed so the JWT decoder bean can be created
+          jwk-set-uri: http://localhost:9999/jwks
 eureka:
   client:
     enabled: false
 server:
-  port: 3003
+  port: 0
