@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway-configmap
+  namespace: gateway
+  labels:
+    app: gateway
+data:
+  REDIS_HOST: "immemorial-sleet-hyperfine-90601.db.redis.io"
+  REDIS_PORT: "17054"
+  ISSUER_URI: "http://auth-service.auth.svc.cluster.local"
+  JWKS_URI: "http://auth-service.auth.svc.cluster.local/oauth2/jwks"
+  SSL_ENABLED: "false"
+  SSL_KEYSTORE: "/certs/keystore.p12"
+  SSL_KEYSTORE_TYPE: "PKCS12"
+  SSL_KEY_ALIAS: "tomcat"
+  SSL_TRUSTSTORE: "/certs/keystore.p12"
+  SERVER_PORT: "8080"
+  REGISTRY_HOSTNAME: "registry-service.registry.svc.cluster.local"
+  REGISTRY_PORT: "8761"
+  GATEWAY_SERVICE_NAME: "gateway-service.gateway.svc.cluster.local"
