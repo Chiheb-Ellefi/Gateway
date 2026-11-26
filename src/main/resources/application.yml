@@ -280,8 +280,13 @@ eureka:
 # RESOURCE SERVER CONFIGURATION
 # ============================================
 
-keySetURI: "http://auth-service.auth.svc.cluster.local/oauth2/jwks"
-introspectionUri: "http://auth-service.auth.svc.cluster.local/oauth2/introspect"
+keySetURI: ${JWKS_URI}
+introspectionUri: ${INTROSPECTION_URI}
 
+# ============================================================================
+# Backend uris
+# ============================================================================
 
+backend:
+  uri: ${BACKEND_URI}
 

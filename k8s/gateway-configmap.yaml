@@ -10,6 +10,7 @@ data:
   REDIS_PORT: "17054"
   ISSUER_URI: "http://auth-service.auth.svc.cluster.local"
   JWKS_URI: "http://auth-service.auth.svc.cluster.local/oauth2/jwks"
+  INTROSPECTION_URI: "http://auth-service.auth.svc.cluster.local/oauth2/introspect"
   SSL_ENABLED: "false"
   SSL_KEYSTORE: "/certs/keystore.p12"
   SSL_KEYSTORE_TYPE: "PKCS12"
@@ -19,3 +20,4 @@ data:
   REGISTRY_HOSTNAME: "registry-service.registry.svc.cluster.local"
   REGISTRY_PORT: "8761"
   GATEWAY_SERVICE_NAME: "gateway-service.gateway.svc.cluster.local"
+  BACKEND_URI: "http://localhost:8080"
