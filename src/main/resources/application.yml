@@ -77,17 +77,34 @@ logging:
   level:
     org.springframework.cloud.gateway: DEBUG
 
+  # ============================================
+# ACTUATOR & MONITORING CONFIGS
+# ============================================
+actuator:
+  username: ${ACTUATOR_USERNAME}
+  password: ${ACTUATOR_PASSWORD}
 management:
+  server:
+    port: ${MANAGEMENT_PORT}
   endpoints:
     web:
       exposure:
-        include: gateway, health, info, circuitbreakers, circuitbreakerevents
+        include: health, info, metrics, prometheus, refresh
       base-path: /actuator
-
   endpoint:
-    gateway:
-      access: read_only
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
 
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      distribution:
+        percentiles_histogram:
+          http.server.requests: true
+        slo:
+          http.server.requests: 100ms, 250ms, 500ms, 1s, 2s
 
 
 # ============================================================================
@@ -275,13 +292,6 @@ eureka:
     initial-status: UP
     instance-id: ${spring.application.name}:${POD_NAME}
 
-
-# ============================================
-# RESOURCE SERVER CONFIGURATION
-# ============================================
-
-keySetURI: ${JWKS_URI}
-introspectionUri: ${INTROSPECTION_URI}
 
 # ============================================================================
 # Backend uris
