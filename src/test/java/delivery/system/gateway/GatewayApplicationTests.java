@@ -13,10 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
         "spring.cloud.discovery.enabled=false",
         "spring.cloud.gateway.server.webflux.discovery.locator.enabled=false",
         "spring.cloud.config.enabled=false",
-
+        "BACKEND_URI=http://localhost:8080",
         "ISSUER_URI=http://localhost:9999",
         "JWKS_URI=http://localhost:9999/oauth2/jwks",
-
+        "MANAGEMENT_PORT=0",
         "REDIS_HOST=localhost",
         "REDIS_PORT=6379",
         "REDIS_DB_USERNAME=test",
@@ -36,7 +36,9 @@ import org.springframework.boot.test.context.SpringBootTest;
         "REGISTRY_HOSTNAME=localhost",
         "REGISTRY_PORT=8761",
         "GATEWAY_SERVICE_NAME=gateway",
-        "POD_NAME=gateway-test"
+        "POD_NAME=gateway-test",
+        "ACTUATOR_USERNAME=actuator",
+       "ACTUATOR_PASSWORD=password"
 })
 class GatewayApplicationTests {
 
