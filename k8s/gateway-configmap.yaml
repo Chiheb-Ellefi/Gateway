@@ -21,3 +21,4 @@ data:
   REGISTRY_PORT: "8761"
   GATEWAY_SERVICE_NAME: "gateway-service.gateway.svc.cluster.local"
   BACKEND_URI: "http://localhost:8080"
+  MANAGEMENT_PORT: "9090"
